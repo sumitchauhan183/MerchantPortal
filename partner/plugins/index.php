@@ -54,50 +54,6 @@ echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function (){
-            $('#upload-plugin-file').click(function (){
-                var vidFileLength = $("#plugin-file")[0].files.length;
-                if(vidFileLength === 0){
-                    swal({
-                        title: "Error!",
-                        text: "Please choose a file!",
-                        icon: "error",
-                    });
-                }else{
-                    var fd = new FormData();
-                    var files = $('#plugin-file')[0].files;
-                    fd.append('new-plugin',files[0]);
-                    $.ajax({
-                        url: 'plugin-validation.php',
-                        type: 'post',
-                        data: fd,
-                        contentType: false,
-                        processData: false,
-                        success: function(response){
-                            var d = JSON.parse(response);
-                            if(d.error){
-                                swal({
-                                    title: "Error!",
-                                    text: d.message,
-                                    icon: "error",
-                                });
-                            }else{
-                                swal({
-                                    title: "Success!",
-                                    text: d.message,
-                                    icon: "success",
-                                }).then(function (){
-                                    window.location.reload();
-                                });
-                            }
-                        },
-                    });
-                }
-            });
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <?php
 $i=1;
 foreach($all_plugins as $key=>$value) {
@@ -114,8 +70,8 @@ foreach($all_plugins as $key=>$value) {
               <p class="card-text">'.substr($description, 0, 199); if(strlen($description) > 199){ echo '...'; } echo '</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">';
-        echo '<button type="button" data-plugin-name="'.$key.'" data-plugin-key="'.$i.'" data-plugin-file="'.$file.'"'; if(file_exists(BASEDIR . "plugins/".$key)) { echo "style='display:none'"; } echo ' class="btn btn-sm btn-success installModal me-2">'.$lang["PARTNER"]["PLUGINS"]["INSTALL"].'</button>';
-        echo '<button type="button" data-plugin-id="'.$plugins->getSettingsValues($key,"plugin_id").'" data-plugin-key="'.$i.'" data-plugin-name="'.$key.'"'; if(!file_exists(BASEDIR . "plugins/".$key)) { echo "style='display:none'"; } echo ' class="btn btn-sm btn-danger me-2 removeModal">'.$lang["PARTNER"]["PLUGINS"]["UNINSTALL"].'</button>';
+    echo '<button type="button" data-plugin-name="'.$key.'" data-plugin-key="'.$i.'" data-plugin-file="'.$file.'"'; if(file_exists(BASEDIR . "plugins/".$key)) { echo "style='display:none'"; } echo ' class="btn btn-sm btn-success installModal me-2">'.$lang["PARTNER"]["PLUGINS"]["INSTALL"].'</button>';
+    echo '<button type="button" data-plugin-id="'.$plugins->getSettingsValues($key,"plugin_id").'" data-plugin-key="'.$i.'" data-plugin-name="'.$key.'"'; if(!file_exists(BASEDIR . "plugins/".$key)) { echo "style='display:none'"; } echo ' class="btn btn-sm btn-danger me-2 removeModal">'.$lang["PARTNER"]["PLUGINS"]["UNINSTALL"].'</button>';
 
     echo
         '<button type="button" class="btn btn-sm btn-info text-white btnShowMore" data-name="'.$name.'" data-slug="'.$key.'" data-plugin-file="'.$file.'" data-external-login="'.$plugins->hasExternalLogin($key).'" data-installed="'.file_exists(BASEDIR . "plugins/".$key).'" data-description="'.strip_tags($description).'" data-fields=\''.$plugins->getSettingsFields($key).'\' data-values=\''.$plugins->getSettingsValues($key,'').'\' data-bs-toggle="modal" data-bs-target="#pluginViewMoreModal">'.$lang["PARTNER"]["PLUGINS"]["VIEW_MORE"].'</button>';
@@ -153,11 +109,11 @@ echo '
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">'.$lang["PARTNER"]["PLUGINS"]["CLOSE"].'</button>';
 
-    echo '<a href="" class="btn btn-sm btn-info text-white me-2 ExternalLogin">'.$lang["PARTNER"]["PLUGINS"]["PERFORM_EXTERNAL_LOGIN"].'</a>';
+echo '<a href="" class="btn btn-sm btn-info text-white me-2 ExternalLogin">'.$lang["PARTNER"]["PLUGINS"]["PERFORM_EXTERNAL_LOGIN"].'</a>';
 
 echo '<button type="button" class="btn btn-sm btn-info text-white pluginSettingsModal me-2" data-plugin-name="" data-plugin-title="" data-bs-dismiss="modal" data-fields=\'\' data-values=\'\'>'.$lang["PARTNER"]["PLUGINS"]["SETTINGS"].'</button>';
 
-    echo '<button type="button" data-plugin-name="" data-plugin-file="" class="btn btn-sm btn-success installModal">'.$lang["PARTNER"]["PLUGINS"]["INSTALL"].'</button>';
+echo '<button type="button" data-plugin-name="" data-plugin-file="" class="btn btn-sm btn-success installModal">'.$lang["PARTNER"]["PLUGINS"]["INSTALL"].'</button>';
 
 echo '<button type="button" data-plugin-id="" data-plugin-key="" data-plugin-name="" class="btn btn-sm btn-danger removeModal">'.$lang["PARTNER"]["PLUGINS"]["UNINSTALL"].'</button>';
 echo '
@@ -183,4 +139,5 @@ echo '
         </div>
     </div>';
 echo "</div>";
+$load_script[] = "https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js";
 echo foot();
